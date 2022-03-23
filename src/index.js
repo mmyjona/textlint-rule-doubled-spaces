@@ -11,13 +11,23 @@ export default function(context, options = {}) {
     [Syntax.Str](node){
       const text = getSource(node);
       const allowMatch = matchPatterns(text, allow);
-      const regex = /\s{2,}/g;
+      const regexSpaces = /[\s　]{2,}/g;
       while (true ) {
-        const matches = regex.exec(text)
+        const matches = regexSpaces.exec(text)
         if (!matches) break;
         const isAllow = allowMatch.some(m => m.startIndex < matches.index && matches.index < m.endIndex);
         if (!isAllow) {
-          report(node, new RuleError("Found doubled spaces.", { index: matches.index }));
+          report(node, new RuleError("发现重复空格。", { index: matches.index }));
+        }
+      }
+      const regexDoubleChineseChar = /([\u4e00-\u9fa5]+)\1+/g;
+      while (true ) {
+        const matches = regexDoubleChineseChar.exec(text)
+        if (!matches) break;
+        const isAllow = allowMatch.some(m => m.startIndex < matches.index && matches.index < m.endIndex);
+        if (!isAllow) {
+          console.log(matches);
+          report(node, new RuleError("发现重复中文字符。", { index: matches.index }));
         }
       }
     }
