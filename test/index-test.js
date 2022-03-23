@@ -3,7 +3,7 @@ import TextLintTester from "textlint-tester";
 const tester = new TextLintTester();
 import rule from "../src/index";
 
-const errorMessage = "Found doubled spaces.";
+const errorMessage = "发现重复空格。";
 
 tester.run("rule", rule, {
   valid: [
