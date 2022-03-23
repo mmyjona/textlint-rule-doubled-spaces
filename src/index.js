@@ -26,6 +26,8 @@ export default function(context, options = {}) {
         if (!matches) break;
         const isAllow = allowMatch.some(m => m.startIndex < matches.index && matches.index < m.endIndex);
         if (!isAllow) {
+          const resultMatche = matchPatterns(matches[0], allow);
+          if (resultMatche.length > 0) return "break";
           report(node, new RuleError(`发现重复中文字符\"${matches[0]}\"。`, { index: matches.index }));
         }
       }
